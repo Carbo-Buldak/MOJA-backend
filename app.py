@@ -9,5 +9,12 @@ def hello_world():
     return 'Hello World!'
 
 
+@app.route('/route')
+def hello_route():
+    return 'Hello Route!'
+
+
+
+
 if __name__ == '__main__':
     app.run()
