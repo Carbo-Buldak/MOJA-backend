@@ -4,7 +4,8 @@ import config
 client = MongoClient(config.config['mongodb'][0]['url'])
 mongodb = client.MOJA
 
-#mongodb.videos.create_index([('title', 'text')], name='search_index')
+# mongodb.videos.create_index([('title', 'text')], name='search_index')
+
 
 def get_all_document(cursor, apply=None):
     output = []
