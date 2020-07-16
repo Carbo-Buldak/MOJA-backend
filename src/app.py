@@ -28,7 +28,7 @@ def sign_in():
         else:
             return jsonify({'message': 'Invalid email or password'}), 401
     else:
-        return jsonify({'message': f'Bad request parameters. {_json}'}), 400
+        return jsonify({'message': 'Bad request parameters.'}), 400
 
 
 api = Api(title='MOJA API', version='1.0', description='api for MOJA web application')
