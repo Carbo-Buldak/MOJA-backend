@@ -1,4 +1,8 @@
 MOJA.pem
+Dockerfile
+src/config.yaml
+.DS_Store
+.idea/
 
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm,flask
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm,flask

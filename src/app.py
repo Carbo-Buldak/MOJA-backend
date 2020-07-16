@@ -1,5 +1,5 @@
-import config
-from db import mongodb as db
+from src import config
+from src.db import mongodb as db
 
 import datetime
 
@@ -8,8 +8,8 @@ from flask_restx import Api
 from flask_jwt_extended import JWTManager, create_access_token
 import flask_bcrypt
 
-from user import api as user_api
-from video import api as video_api
+from src.user import api as user_api
+from src.video import api as video_api
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = config.config['jwt'][0]['secret_key']

@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from db import mongodb as db
-from db import get_all_document
+from src.db import mongodb as db
+from src.db import get_all_document
 
 from pymongo import DESCENDING
 

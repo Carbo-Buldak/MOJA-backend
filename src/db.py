@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-import config
+from src import config
 
 client = MongoClient(config.config['mongodb'][0]['url'])
 mongodb = client.MOJA

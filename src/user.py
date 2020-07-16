@@ -1,6 +1,6 @@
-from db import mongodb as db
+from src.db import mongodb as db
 
-from flask import request, jsonify
+from flask import request
 from flask_restx import Resource, Namespace
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import flask_bcrypt
