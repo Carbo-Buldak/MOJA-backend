@@ -1,4 +1,4 @@
-from src.db import mongodb as db
+from db import mongodb as db
 
 from flask import request
 from flask_restx import Resource, Namespace
@@ -16,7 +16,7 @@ class User(Resource):
     def get(self):
         email = get_jwt_identity()['email']
 
-        user = db.users.find_one({'email': email}, {'_id': 0, 'password': 0})
+        user = db.users.find_one({'email': email}, {'_id': 0, 'password': 0, 'email': 0})
         if user:
             return {'user': user}, 200
         else:
