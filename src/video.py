@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from src.db import mongodb as db
-from src.db import get_all_document
+from db import mongodb as db
+from db import get_all_document
 
 from pymongo import DESCENDING
 
@@ -34,7 +34,6 @@ class VideoList(Resource):
             cursor = db.videos.find({'status': status}, {'_id': 0}).sort(sorting, DESCENDING).skip(skips).limit(page_size)
             return {'videos': get_all_document(cursor, apply=change_date_format)}, 200
 
-
     @jwt_required
     def post(self):
         _json = request.get_json(silent=True)
@@ -60,7 +59,6 @@ class VideoList(Resource):
             return {'message': 'Bad request'}, 400
 
 
-
 @api.route('/<url>')
 class Video(Resource):
 
@@ -81,7 +79,8 @@ class Video(Resource):
             email = get_jwt_identity()['email']
 
             user = db.users.find_one_and_update({'email': email}, {'$pull': {'subtitling_videos': {'url': url}},
-                                                      '$push': {'subtitled_videos': {'title': _json['title'], 'url': url}}})
+                                                '$push': {'subtitled_videos': {'title': _json['title'], 'url': url}},
+                                                '$inc': {'point': len(_json['subtitles'])}})
 
             nickname = user['nickname']
 
