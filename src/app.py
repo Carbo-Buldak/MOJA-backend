@@ -1,5 +1,5 @@
-from src import config
-from src.db import mongodb as db
+import config
+from db import mongodb as db
 
 import datetime
 
@@ -8,13 +8,14 @@ from flask_restx import Api
 from flask_jwt_extended import JWTManager, create_access_token
 import flask_bcrypt
 
-from src.user import api as user_api
-from src.video import api as video_api
+from user import api as user_api
+from video import api as video_api
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = config.config['jwt'][0]['secret_key']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=10)
 jwt = JWTManager(app)
+
 
 @app.route('/api/signin')
 def sign_in():
