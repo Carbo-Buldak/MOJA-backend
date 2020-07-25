@@ -88,6 +88,8 @@ class Video(Resource):
                                                {'$set': {'subtitles': _json['subtitles'], 'date': datetime.now(),
                                                          'author': nickname, 'status': 2}})
             if db_response.modified_count == 1:
+                db.users.update({'subtitling_videos': {'$elemMatch': {'url': url}}},
+                                {'$pull': {'subtitled_videos': {'url': url}}})
                 return {'message': 'Updated video successfully'}, 200
             else:
                 return {'message': 'Failed to update video'}, 400

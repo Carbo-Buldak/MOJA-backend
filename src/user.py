@@ -28,6 +28,7 @@ class User(Resource):
             if not db.users.find_one({'$or': [{'email': _json.get('email')}, {'nickname': _json.get('nickname')}]}):
                 _json['password'] = flask_bcrypt.generate_password_hash(_json['password'])
                 _json['point'] = 0
+                _json['requested_videos'] = []
                 _json['subtitling_videos'] = []
                 _json['subtitled_videos'] = []
                 db_response = db.users.insert_one(_json)
