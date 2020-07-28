@@ -37,7 +37,7 @@ class User(Resource):
                 else:
                     return {'message': 'Failed to create user.'}, 400
             else:
-                return {'message': 'User already exists.'}, 403
+                return {'message': 'User already exists.'}, 409
         else:
             return {'message': 'Bad request.'}, 400
 
