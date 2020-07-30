@@ -20,18 +20,20 @@ def change_date_format(document):
 @api.route('/')
 class VideoList(Resource):
 
-    def get(self, page_size=8):
+    def get(self):
         is_searching = request.args.get('searching', default=None)
         if is_searching == 'true':
             keyword = request.args.get('keyword')
             cursor = db.videos.find({'$text': {'$search': keyword}}, {'_id': 0})
             return {'videos': get_all_document(cursor, apply=change_date_format)}, 200
         else:
-            status = int(request.args.get('status', default='0'))
+            items = int(request.args.get('items', default='16'))
+            status = [0] if request.args.get('status') else [1, 2]
             sorting = request.args.get('sorting', default='date')
             skips = int(request.args.get('skips', default='0'))
 
-            cursor = db.videos.find({'status': status}, {'_id': 0}).sort(sorting, DESCENDING).skip(skips).limit(page_size)
+            cursor = db.videos.find({'status': {'$in': status}},
+                                    {'_id': 0}).sort(sorting, DESCENDING).skip(skips).limit(items)
             return {'videos': get_all_document(cursor, apply=change_date_format)}, 200
 
     @jwt_required
