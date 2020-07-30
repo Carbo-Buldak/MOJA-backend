@@ -51,6 +51,8 @@ class TempStoredVideo(Resource):
         email = get_jwt_identity()['email']
         _json = request.get_json(silent=True)
 
+        _json['subtitles'] = sorted(_json['subtitles'], key=itemgetter('playedTime'), reverse=True)
+
         if _json:
             db_response = db.users.update_one({'email': email, 'subtitling_videos.url': url},
                                               {'$set': {'subtitling_videos.1.subtitles': _json['subtitles']}})
