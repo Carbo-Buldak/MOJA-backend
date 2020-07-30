@@ -5,6 +5,7 @@ from flask_restx import Resource, Namespace
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import flask_bcrypt
 
+from operator import itemgetter
 
 api = Namespace('user')
 
@@ -41,17 +42,28 @@ class User(Resource):
         else:
             return {'message': 'Bad request.'}, 400
 
+
+@api.route('/video/<url>')
+class TempStoredVideo(Resource):
+
     @jwt_required
-    def patch(self):
+    def patch(self, url):
         email = get_jwt_identity()['email']
         _json = request.get_json(silent=True)
 
         if _json:
-            db_response = db.users.update_one({'email': email}, {'$push': {'subtitling_videos': _json}})
+            db_response = db.users.update_one({'email': email, 'subtitling_videos.url': url},
+                                              {'$set': {'subtitling_videos.1.subtitles': _json['subtitles']}})
+
             if db_response.modified_count == 1:
-                return {'message': 'User updated successfully.'}, 201
+                db.videos.update_one({'url': url}, {'$set': {'status': 1}})
+                return {'message': 'Temporary storing video saved successfully.'}, 200
             else:
-                return {'message': 'Failed to update user.'}, 400
+                db_response = db.users.update_one({'email': email}, {'$push': {'subtitling_videos': _json}})
+                if db_response.modified_count == 1:
+                    return {'message': 'Temporary storing video saved successfully.'}, 200
+                else:
+                    return {'message': 'Failed to save temporary storing video.'}, 400
         else:
             return {'message': 'Bad request.'}, 400
 
