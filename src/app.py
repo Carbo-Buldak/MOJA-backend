@@ -20,7 +20,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=10)
 jwt = JWTManager(app)
 
 
-@app.route('/api/signin')
+@app.route('/api/signin', methods=['POST'])
 def sign_in():
     _json = request.get_json(silent=True)
     if _json:
