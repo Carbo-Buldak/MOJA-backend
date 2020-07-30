@@ -39,11 +39,7 @@ api = Api(title='MOJA API', version='1.0', description='api for MOJA web applica
 api.add_namespace(user_api, path='/api/user')
 api.add_namespace(video_api, path='/api/video')
 
-
-
 api.init_app(app)
 
-
 if __name__ == '__main__':
-
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
