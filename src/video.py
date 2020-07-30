@@ -42,6 +42,7 @@ class VideoList(Resource):
     def post(self):
         email = get_jwt_identity()['email']
         _json = request.get_json(silent=True)
+
         if _json:
 
             video = db.videos.find_one({'url': _json['url']})
@@ -49,13 +50,14 @@ class VideoList(Resource):
             if video:
                 db_response = db.videos.update_one({'_id': video['_id'], 'status': {'$ne': 2}}, {'$inc': {'count': 1}})
                 if db_response.modified_count == 1:
-                    return {'message': 'Updated video successfully'}, 200
+                    return {'message': 'Updated video successfully.'}, 200
                 else:
-                    return {'message': 'Failed to update existing video'}, 200
+                    return {'message': 'Failed to update existing video.'}, 200
             else:
                 _json['date'] = datetime.now()
                 _json['status'] = 0
                 _json['count'] = 1
+
                 if db.videos.insert_one(_json):
                     db.users.update_one({'email': email}, {'$push': {'requested_videos': {'url': _json['url'],
                                                                                           'title': _json['title']}}})
@@ -63,14 +65,13 @@ class VideoList(Resource):
                 else:
                     return {'message': 'Failed to create video.'}, 400
         else:
-            return {'message': 'Bad request'}, 400
+            return {'message': 'Bad request.'}, 400
 
 
 @api.route('/<url>')
 class Video(Resource):
 
     def get(self, url):
-
         document = db.videos.find_one_and_update({'url': url}, {'$inc': {'count': 1}}, {'_id': 0})
         document['date'] = document['date'].strftime('%Y.%m.%d')
 
@@ -105,10 +106,3 @@ class Video(Resource):
 
         else:
             return {'message': 'Bad request'}, 400
-
-
-
-
-
-
-
