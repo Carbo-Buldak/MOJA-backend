@@ -40,6 +40,7 @@ class VideoList(Resource):
 
     @jwt_required
     def post(self):
+        email = get_jwt_identity()['email']
         _json = request.get_json(silent=True)
         if _json:
 
@@ -56,6 +57,8 @@ class VideoList(Resource):
                 _json['status'] = 0
                 _json['count'] = 1
                 if db.videos.insert_one(_json):
+                    db.users.update_one({'email': email}, {'$push': {'requested_videos': {'url': _json['url'],
+                                                                                          'title': _json['title']}}})
                     return {'message': 'Created video successfully'}, 201
                 else:
                     return {'message': 'Failed to create video.'}, 400
