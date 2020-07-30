@@ -9,6 +9,8 @@ from flask import request
 from flask_restx import Resource, Namespace
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
+from operator import itemgetter
+
 api = Namespace('video')
 
 
@@ -78,6 +80,8 @@ class Video(Resource):
     def patch(self, url):
         _json = request.get_json()
         if _json:
+            _json['subtitles'] = sorted(_json['subtitles'], key=itemgetter('playedTime'))
+
             email = get_jwt_identity()['email']
 
             user = db.users.find_one_and_update({'email': email}, {'$pull': {'subtitling_videos': {'url': url}},
