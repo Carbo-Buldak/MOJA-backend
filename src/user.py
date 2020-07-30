@@ -69,5 +69,12 @@ class TempStoredVideo(Resource):
         else:
             return {'message': 'Bad request.'}, 400
 
+    @jwt_required
+    def get(self, url):
+        email = get_jwt_identity()['email']
 
-
+        video = db.users.find_one({'email': email, 'subtitling_videos.url': url}, {'subtitling_videos.$': 1, '_id': 0})
+        if video:
+            return {'video': video['subtitling_videos']}, 200
+        else:
+            return 'Failed to retrieve temporary stored video. This video may already have been subtitled.', 400
